@@ -2,8 +2,8 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity() // Esto indica que es una tabla de base de datos
 export class Product {
-  @PrimaryGeneratedColumn() // ID autoincremental
-  id: number;
+  @PrimaryGeneratedColumn('increment') // ID autoincremental
+  id!: number;
 
   @Column()
   name: string;

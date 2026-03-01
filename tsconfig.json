@@ -19,7 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
     "isolatedModules": false,
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "strictPropertyInitialization": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
