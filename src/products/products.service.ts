@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/products.entity';
 import { CreateProductDto } from './dto/create-products.dto';
+import { UpdateProductDto } from './dto/update-products.dto';
 
 @Injectable()
 export class ProductsService {
@@ -20,8 +21,11 @@ export class ProductsService {
   }
 
   async create(createProductDto: CreateProductDto) {
-    const newProduct = this.productRepository.create(createProductDto);
-    return this.productRepository.save(newProduct); // INSERT INTO...
+    const { categoryId, ...productData } = createProductDto;
+
+    const product = this.productRepository.create({
+      ...productData, category:{ id: categoryId} }); // TyoeORM entiende que esto vincula al ID
+    return this.productRepository.save(product); 
   }
 
   async findOne(id: number) {
@@ -34,12 +38,18 @@ export class ProductsService {
 
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    const product = await this.productRepository.findOneBy({ id });
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
-    await this.productRepository.update(id, updateProductDto);
-    return { message: 'Product updated successfully' };
+    const { categoryId, ...dataToUpdate } = updateProductDto;
+  
+    // Preload busca el objeto por ID y le "encima" los nuevos datos
+    const product = await this.productRepository.preload({
+      id: id,
+      ...dataToUpdate,
+      category: categoryId ? { id: categoryId } : undefined, // Si mandan categoría, la actualiza
+    });
+  
+    if (!product) throw new NotFoundException(`Producto con ID ${id} no encontrado`);
+  
+    return await this.productRepository.save(product);
   }
   
   async remove(id: number) {

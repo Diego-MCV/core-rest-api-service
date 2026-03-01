@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, MinLength, IsPositive, IsOptional } from 'class-validator';
+import { IsString, IsNumber, MinLength, IsPositive, IsOptional, IsInt } from 'class-validator';
 
 export class CreateProductDto {
   @ApiProperty({ example: 'Lenovo Legion 5' })
@@ -16,4 +16,8 @@ export class CreateProductDto {
   @IsNumber()
   @IsPositive({ message: 'El precio debe ser un número mayor a 0' })
   price!: number;
+
+  @ApiProperty({ description: 'ID de la categoría existente', example: 1 })
+  @IsInt()
+  categoryId!: number;
 }

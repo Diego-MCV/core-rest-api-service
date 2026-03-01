@@ -16,9 +16,13 @@ async function bootstrap() {
 
   // 2. Configurar Swagger (DEBE IR ANTES DEL LISTEN)
   const config = new DocumentBuilder()
-    .setTitle('Core REST API')
-    .setVersion('1.0')
-    .build();
+  .setTitle('Core REST API Service')
+  .setDescription('API para la gestión de inventarios y productos de NestJS')
+  .setVersion('1.0')
+  .addTag('Products', 'Operaciones relacionadas con los productos')
+  .addTag('Categories', 'Gestión de categorías de productos')
+  .build();
+  
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
